@@ -5,7 +5,7 @@ from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
 from grid_utils import build_circuit, detector_grid_index, to_grid
 
-DISTANCE = 3   # set to 5 to train the distance 5 model
+DISTANCE = 5   # set to 5 to train the distance 5 model
 ROUNDS = 5
 P = 0.001
 
