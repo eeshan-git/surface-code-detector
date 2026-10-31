@@ -39,9 +39,6 @@ For distance 3, repeat the same steps with `distance = 3` (or `DISTANCE = 3`) in
 
 ### Before you run
 
-Keep `p = 0.001` and `rounds = 5` as they are. Each script sets its distance at the top (`distance = 3` or `DISTANCE = 3`). Set it to match the run you want:
-
-- `evaluate_network.py` is set to distance 5 as uploaded, and it loads `decoder_model.pth`, the distance 5 flat model. For distance 3, change the distance and the model path to `decoder_model_d3_200k.pth`.
-- `evaluate_pymatching.py` is set to distance 3 in this copy, so change it to 5 for the distance 5 PyMatching result.
+Keep `p = 0.001` and `rounds = 5` as they are. Each script sets its distance at the top (`distance = 3` or `DISTANCE = 5`). Set it to match the run you want:
 
 Data (`.npy`) and model (`.pth`) files are not in the repo. Each step regenerates them.
