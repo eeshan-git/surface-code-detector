@@ -2,7 +2,7 @@ import stim
 import numpy as np
 import pymatching
 
-distance = 3
+distance = 5
 rounds = 5
 p = 0.001
 
