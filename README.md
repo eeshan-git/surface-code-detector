@@ -39,6 +39,6 @@ For distance 3, repeat the same steps with `distance = 3` (or `DISTANCE = 3`) in
 
 ### Before you run
 
-Keep `p = 0.001` and `rounds = 5` as they are. Each script sets its distance at the top (`distance = 3` or `DISTANCE = 5`). Set it to match the run you want:
+Keep `p = 0.001` and `rounds = 5` as they are. Each script sets its distance at the top (`distance = 3` or `DISTANCE = 5`).
 
 Data (`.npy`) and model (`.pth`) files are not in the repo. Each step regenerates them.
