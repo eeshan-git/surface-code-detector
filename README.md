@@ -27,3 +27,16 @@ Only one noise rate and two code distances were tested, so this shows a trend, n
 4. `python evaluate_pymatching.py` and `python evaluate_network.py` / `python evaluate_conv.py` (evaluates on the seeded shots)
 
 Install with `pip install stim pymatching torch scikit-learn numpy matplotlib`.
+
+### Before you run
+
+Each script sets its distance at the top with `distance = 3` or `DISTANCE = 3`. The four main scripts were run at both distances, so change the value to match the run you want. Keep `p = 0.001` and `rounds = 5` as they are, since all results were produced with those settings.
+
+The training and evaluation scripts read files by name, so the file names have to match:
+
+1. `generate_detectors.py` writes `detections.npy` and `observables.npy`. Rename these to `detections_d{distance}_200k.npy` and `observables_d{distance}_200k.npy` after generating, for example `detections_d5_200k.npy` for distance 5.
+2. `train_decoder_detectors.py` reads `detections.npy` and `observables.npy`. Run it before renaming, or change its file names to match your renamed files.
+3. `train_conv_decoder.py` and `evaluate_conv.py` read the distance-named files and the saved model `decoder_conv_d{distance}.pth`.
+4. `evaluate_network.py` loads `decoder_model.pth`, so it is set to distance 5. It must be run after `train_decoder_detectors.py` at distance 5.
+
+Generated data (`.npy`) and model files (`.pth`) are not included in the repo. Each step regenerates them, and they can take several minutes to produce.
