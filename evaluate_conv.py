@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 from grid_utils import build_circuit, detector_grid_index, to_grid
 
-DISTANCE = 3   # must match the training run
+DISTANCE = 5   # must match the training run
 ROUNDS = 5
 P = 0.001
 
