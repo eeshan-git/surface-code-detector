@@ -1,7 +1,7 @@
 import stim
 import numpy as np
 
-distance = 3
+distance = 5
 rounds = 5
 p = 0.001 # physical error rate
 
