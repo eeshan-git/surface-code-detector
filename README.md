@@ -6,7 +6,7 @@ Can a neural network decode errors on a rotated surface code as well as PyMatchi
 ## Setup
 Rotated surface code memory experiment from Stim (surface_code:rotated_memory_z), 5 rounds. Circuit level noise with physical error rate p = 0.001, including depolarization after Clifford gates, data qubit depolarization before each round, and measurement and reset flip errors. The network inputs are detection events and the label is whether the logical observable flipped.
 
-Training: 200,000 shots per distance (50,000 for the distance 3 flat network), unseeded sampler, 80/20 split.
+Training: 200,000 shots per distance (50,000 for the distance 3 flat network), drawn with an unseeded sampler, so training shots differ from the evaluation shots. 80/20 split.
 Evaluation: 200,000 fresh shots with seed 12345. All decoders are scored on the same shots.
 
 ## Results (failures out of 200,000 shots)
@@ -19,24 +19,28 @@ Evaluation: 200,000 fresh shots with seed 12345. All decoders are scored on the 
 ## Limitations
 Only one noise rate and two code distances were tested, so this shows a trend, not a threshold. The learned decoders were trained on modest data. PyMatching's failure counts are small, so its rates carry statistical noise.
 
+## Files
+- `generate_detectors.py`: generates detection events and logical labels
+- `train_decoder_detectors.py`: trains the flat network
+- `train_conv_decoder.py`: trains the convolutional network (needs `grid_utils.py`)
+- `evaluate_pymatching.py`, `evaluate_network.py`, `evaluate_conv.py`: evaluate on the seeded shots
+- `grid_utils.py`: shared circuit builder and detector-to-grid helper, required by the convolutional scripts
+
 ## How to reproduce
+Install with `pip install stim pymatching torch scikit-learn numpy matplotlib`. Keep all files in the same folder.
 
-1. `python generate_detectors.py` (generates detection events and logical labels)
-2. `python train_decoder_detectors.py` (trains the flat network)
-3. `python train_conv_decoder.py` (trains the convolutional network)
-4. `python evaluate_pymatching.py` and `python evaluate_network.py` / `python evaluate_conv.py` (evaluates on the seeded shots)
-
-Install with `pip install stim pymatching torch scikit-learn numpy matplotlib`.
+1. `python generate_detectors.py` at distance 5, then rename `detections.npy` to `detections_d5_200k.npy` and `observables.npy` to `observables_d5_200k.npy`.
+2. `python train_decoder_detectors.py` trains the flat network. It reads `detections.npy`, so run it before the rename in step 1, or rename the files back.
+3. `python train_conv_decoder.py` trains the convolutional network. It reads the distance-named files from step 1.
+4. `python evaluate_pymatching.py`, `python evaluate_network.py`, and `python evaluate_conv.py` evaluate on the seeded shots.
 
 ### Before you run
 
-Each script sets its distance at the top with `distance = 3` or `DISTANCE = 3`. The four main scripts were run at both distances, so change the value to match the run you want. Keep `p = 0.001` and `rounds = 5` as they are, since all results were produced with those settings.
+Keep `p = 0.001` and `rounds = 5` as they are. Each script sets its distance at the top (`distance = 3` or `DISTANCE = 3`). Set it to match the run you want:
 
-The training and evaluation scripts read files by name, so the file names have to match:
+- `evaluate_network.py` is fixed to distance 5, because it loads `decoder_model.pth`, the distance 5 flat model.
+- `evaluate_pymatching.py` is set to distance 3 in this copy, so change it to 5 for the distance 5 PyMatching result.
 
-1. `generate_detectors.py` writes `detections.npy` and `observables.npy`. Rename these to `detections_d{distance}_200k.npy` and `observables_d{distance}_200k.npy` after generating, for example `detections_d5_200k.npy` for distance 5.
-2. `train_decoder_detectors.py` reads `detections.npy` and `observables.npy`. Run it before renaming, or change its file names to match your renamed files.
-3. `train_conv_decoder.py` and `evaluate_conv.py` read the distance-named files and the saved model `decoder_conv_d{distance}.pth`.
-4. `evaluate_network.py` loads `decoder_model.pth`, so it is set to distance 5. It must be run after `train_decoder_detectors.py` at distance 5.
+The flat distance 3 network was trained on 50,000 shots. All other networks used 200,000.
 
-Generated data (`.npy`) and model files (`.pth`) are not included in the repo. Each step regenerates them, and they can take several minutes to produce.
+Data (`.npy`) and model (`.pth`) files are not in the repo. Each step regenerates them.
