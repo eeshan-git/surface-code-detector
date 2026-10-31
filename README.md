@@ -27,20 +27,21 @@ Only one noise rate and two code distances were tested, so this shows a trend, n
 - `grid_utils.py`: shared circuit builder and detector-to-grid helper, required by the convolutional scripts
 
 ## How to reproduce
-Install with `pip install stim pymatching torch scikit-learn numpy matplotlib`. Keep all files in the same folder.
+Install with `pip install stim pymatching torch scikit-learn numpy matplotlib`. Keep all files in the same folder. The steps below reproduce the distance 5 results.
 
-1. `python generate_detectors.py` at distance 5, then rename `detections.npy` to `detections_d5_200k.npy` and `observables.npy` to `observables_d5_200k.npy`.
-2. `python train_decoder_detectors.py` trains the flat network. It reads `detections.npy`, so run it before the rename in step 1, or rename the files back.
-3. `python train_conv_decoder.py` trains the convolutional network. It reads the distance-named files from step 1.
-4. `python evaluate_pymatching.py`, `python evaluate_network.py`, and `python evaluate_conv.py` evaluate on the seeded shots.
+1. `python generate_detectors.py` at distance 5.
+2. `python train_decoder_detectors.py` trains the flat network. It reads `detections.npy`, so run it now, before renaming.
+3. Rename `detections.npy` to `detections_d5_200k.npy` and `observables.npy` to `observables_d5_200k.npy`.
+4. `python train_conv_decoder.py` trains the convolutional network. It reads the distance-named files from step 3.
+5. `python evaluate_pymatching.py`, `python evaluate_network.py`, and `python evaluate_conv.py` evaluate on the seeded shots.
+
+For distance 3, repeat the same steps with `distance = 3` (or `DISTANCE = 3`) in each script, and use `_d3_200k` in the file names. For the distance 3 flat network, generate 50,000 training shots by setting `shots=50000` in `generate_detectors.py`. All evaluation scripts still use 200,000 shots.
 
 ### Before you run
 
 Keep `p = 0.001` and `rounds = 5` as they are. Each script sets its distance at the top (`distance = 3` or `DISTANCE = 3`). Set it to match the run you want:
 
-- `evaluate_network.py` is fixed to distance 5, because it loads `decoder_model.pth`, the distance 5 flat model.
+- `evaluate_network.py` is fixed to distance 5, because it loads `decoder_model.pth`, the distance 5 flat model. Use it only for distance 5 unless you retrain and rename the model.
 - `evaluate_pymatching.py` is set to distance 3 in this copy, so change it to 5 for the distance 5 PyMatching result.
-
-The flat distance 3 network was trained on 50,000 shots. All other networks used 200,000.
 
 Data (`.npy`) and model (`.pth`) files are not in the repo. Each step regenerates them.
