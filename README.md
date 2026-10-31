@@ -18,3 +18,12 @@ Evaluation: 200,000 fresh shots with seed 12345. All decoders are scored on the 
 
 ## Limitations
 Only one noise rate and two code distances were tested, so this shows a trend, not a threshold. The learned decoders were trained on modest data. PyMatching's failure counts are small, so its rates carry statistical noise.
+
+## How to reproduce
+
+1. `python generate_detectors.py` (generates detection events and logical labels)
+2. `python train_decoder_detectors.py` (trains the flat network)
+3. `python train_conv_decoder.py` (trains the convolutional network)
+4. `python evaluate_pymatching.py` and `python evaluate_network.py` / `python evaluate_conv.py` (evaluates on the seeded shots)
+
+Install with `pip install stim pymatching torch scikit-learn numpy matplotlib`.
